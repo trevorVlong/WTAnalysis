@@ -1,0 +1,64 @@
+function [] = plotcxa(file,fig,plotops)
+%PLOTCLA plots cl vs alpha with dcj sidebar
+% datatable takes in a table 
+
+
+% ===========================================
+% load runfile
+
+    load(file);
+    
+% ----------------------------------- 
+    set(0,'CurrentFigure',fig)
+    hold on
+    colormap(plotops.colormap);
+    ax = scatter(alfa(:),cx2D(:),20, dcj(:),'filled');
+    
+    
+
+    
+    if plotops.interp == 1
+        alfarange = [min(alfa(:)), max(alfa(:))];
+        dcjrange  = [0, max(dcj(:))];
+        
+        alfavec = linspace(alfarange(1),alfarange(2),20);
+        dcjvec  = linspace(0,dcjrange(2),5);
+        
+        for ndcj = 1:5
+            dcjcolorindex = round(dcjvec(ndcj)/plotops.dcjmax*1000);
+            
+            cxinterp = Vcx(alfavec,dcjvec(ndcj)*ones(size(alfavec)));
+            
+            plot(alfavec,cxinterp,...
+                 'Color', plotops.colormap(dcjcolorindex+1,:),...
+                 'LineWidth',1.5 );
+            hold on
+            
+        end
+        
+        
+    end
+    
+    % colorbar etc
+    cb = colorbar;
+    caxis([0,plotops.dcjmax]);
+    cb.Label.Interpreter= 'latex';
+    cb.Label.String = "$\Delta{c_J}$";
+    cb.Label.Rotation = 0;
+    cb.Label.Position = [3,4.75,0];
+    
+    % fontsize
+    set(gca,'FontName',plotops.font);
+    set(gca,'FontSize',10);
+    grid on   
+    
+    
+    % labels, 
+    xlabel('$\alpha$','Interpreter','latex','FontSize',plotops.labelFS);
+    ylabel('$c_x$','Interpreter','latex','FontSize',plotops.labelFS);
+    cb.Label.FontSize = plotops.labelFS;
+    
+    ttl = sprintf('%s $\\delta_f$ = %2.0f',plotops.name, flap_ang);
+    title(ttl,'Interpreter','latex');
+end
+

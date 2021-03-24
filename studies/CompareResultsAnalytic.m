@@ -13,7 +13,7 @@ plotops.analytic = 0;
 
 
 % setup figures
-clafig = figure('Visible','off');
+clfig = figure('Visible','off');
 cxafig = figure('Visible','off');
 cmafig = figure('Visible','off');
 polarfig = figure('Visible','off');
@@ -65,8 +65,8 @@ plotpolar(filename,polarfig,plotops);
 % turn figures back on
 
 clafig.Visible = 'on';
-cxafig.Visible = 'on';
+%cxafig.Visible = 'on';
 % cmafig.Visible = 'on';
-polarfig.Visible = 'on';
+%polarfig.Visible = 'on';
     
 

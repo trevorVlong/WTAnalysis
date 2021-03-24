@@ -1,5 +1,5 @@
 
-function [] = setup()
+function [] = setup_collection()
     %------------------------------------------------------
     % wing geometry  
     wing_geom = table();
@@ -19,10 +19,10 @@ function [] = setup()
     % dropbox path
     %examples
     %mac
-    paths.dropboxpath = '/Users/trevorlong/Dropbox (MIT)/Tunnel_Data'; %adjust for you machine
-    paths.runpath = strcat(paths.dropboxpath,'/sum_fall_20/runs/');
-    paths.tarepath = strcat(paths.dropboxpath,'/sum_fall_20/tares/');
-    paths.calpath = strcat(paths.dropboxpath,'/sum_fall_20/calibrations/');
+    paths.dropboxpath = '/Users/trevorlong/Dropbox (MIT)/Tunnel_Data/'; %adjust for you machine
+    paths.runpath = strcat(paths.dropboxpath,'spring21/PerformanceRuns/runs');
+    paths.tarepath = strcat(paths.dropboxpath,'spring21/PerformanceRuns/tares');
+    paths.calpath = strcat(paths.dropboxpath,'spring21/PerformanceRuns/calibrations');
     paths.motorfiles = strcat(paths.dropboxpath,'/spring21/motormap/maps');
     paths.interppath = strcat(paths.dropboxpath,'/spring21/OldData');
     
@@ -33,6 +33,8 @@ function [] = setup()
     paths.wallcorrections = strcat(paths.Analysis,'/WallCorrections');
     paths.MotorModel      = strcat(paths.Analysis,'/MotorModel');
     paths.datamodels  = strcat(paths.Analysis,'/ReducedData');
+    paths.toolboxpath = "\Users\longt\Documents\mit-git\toolbox\toolbox\aawind\aawind";
+    paths.functionpath = "\Users\longt\Documents\mit-git\3by2\WTrun";
     %windows
     %dropboxpath = 'C:/users/longt/Dropbox (MIT)/Tunnel_Data';
 
@@ -82,7 +84,7 @@ function [] = setup()
 
     %------------------------------------------------------
     % save as options.mat
-    save('options.mat',...
+    save('analysis_options.mat',...
          'models',...
          'wing_geom',...
          'paths',...

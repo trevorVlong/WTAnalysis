@@ -2,13 +2,12 @@
 close all
 
 % load paths and dependencies
-
-load('analysis_options.mat');
+load('options.mat');
 
 % add paths to current workspace
 fdnames = fieldnames(paths);
 for fdn = 1:numel(fdnames)
-    addpath(paths.(fdnames{fdn}))
+    addpath(paths.(fdnames{fdn}));
 end
 
 datapath = strcat(paths.dropboxpath,'/','spring21/OldData/');
@@ -20,14 +19,15 @@ plotops.dcjmax = 6.5;
 plotops.colormap = turbo(1000);
 plotops.alpharange = [0,25];
 plotops.clrange    = [-2,10];
+plotops.dcjrange = [-1,10];
 
 %% --------------------------------------------------
 % pick files of interest
 
 Re = 'H';
 df = [20,40,50,55];
-geom = {"solid","slotted"};
-plotops.names = {"single-element","slotted"};
+geom = {"solid"};
+plotops.names = {"single-element"};
 
 n = numel(geom);
 m = numel(df);
@@ -69,38 +69,41 @@ polarplots = figure('Visible','off');
 pos = 1;
 for filen = 1:n
     for filem = 1:m
-        
         file = files{filen,filem};
+        load(file);
         plotops.name = plotops.names{filen};
         % plot clalpha
         set(0,'CurrentFigure',clplots)
         subplot(n,m,pos);
-        plotcla(file,clplots,plotops);
+        plotcldcj(file,clplots,plotops);
+        plot(0:10,sqrt(0:10))
         
         % plot cxalpha
         set(0,'CurrentFigure',cxplots)
         subplot(n,m,pos);
-        plotcxa(file,cxplots,plotops);
-        
-        % plot polar
-        set(0,'CurrentFigure',polarplots)
-        subplot(n,m,pos);
-        plotpolar(file,polarplots,plotops);
-        
-        % plot cm-alpha
-        set(0,'CurrentFigure',cmplots)
-        subplot(n,m,pos);
-        plotcma(file,cmplots,plotops);        
+        plotcxdcj(file,cxplots,plotops);
+%         
+%         % plot polar
+%         set(0,'CurrentFigure',polarplots)
+%         subplot(n,m,pos);
+%         plotpolar(file,polarplots,plotops);
+%         
+%         % plot cm-alpha
+%         set(0,'CurrentFigure',cmplots)
+%         subplot(n,m,pos);
+%         plotcma(file,cmplots,plotops);    
+
         pos = pos+1;
     end
 end
 
-% clplots.Visible = 'on';
-% cxplots.Visible = 'on';
+ clplots.Visible = 'on';
+ cxplots.Visible = 'on';
 % polarplots.Visible = 'on';
-cmplots.Visible = 'on';
+%cmplots.Visible = 'on';
 
 
 
 
 
+ 

@@ -2,18 +2,19 @@
     %  Implementation of 2D tunnel-wall corrections, described in twc.pdf
     %  Consistent units must be used here
     %
-function corrected2D = twall(uncorrected2D,walldata)
+function corrected2D = twall(uncorrected2D)
 
-    walldata = mean(walldata,2)';
-    tunnelq = mean(uncorrected2D.tunnelq);
+%     walldata = mean(walldata,2)';
+     tunnelq = mean(uncorrected2D.tunnelq);
+%     
+%     dq = -((walldata-walldata(12))/walldata(12))* tunnelq;
+%     qwall = dq;
     
-    dq = -((walldata-walldata(12))/walldata(12))* tunnelq;
-    qwall = dq;
+%     LSwall= flip([qwall(1:11),qwall(13:15)]);
+%     USwall =  flip(qwall(16:29));
     
-    LSwall= flip([qwall(1:11),qwall(13:15)]);
-    USwall =  flip(qwall(16:29));
-    
-    
+    cliter = [];
+    cxiter = [];
 
     % max number of iterations and convergence tolerance
     itmax = 400;
@@ -147,8 +148,8 @@ function corrected2D = twall(uncorrected2D,walldata)
 
     %-------------------------------------------------------
     % tap section: pressures specified
-    ibcbot(Ninl+1:Ninl+Ntap) = 1;
-    ibctop(Ninl+1:Ninl+Ntap) = 1;
+    ibcbot(Ninl+1:Ninl+Ntap) = 2;
+    ibctop(Ninl+1:Ninl+Ntap) = 2;
 
     %- - - - - - - - - -
     % set made-up  p_wall-p_atm  at taps for testing using static-pressure routine
@@ -160,17 +161,17 @@ function corrected2D = twall(uncorrected2D,walldata)
     pspbot_est(Ninl+1:Ninl+Ntap) = ...
       pstat(rho,Vout,Lam,Gam,xcbot(Ninl+1:Ninl+Ntap),zcbot(Ninl+1:Ninl+Ntap));
   
-    pspbot(Ninl+1:Ninl+Ntap) = ...
-        USwall;
+%     pspbot(Ninl+1:Ninl+Ntap) = ...
+%         USwall;
 
     psptop_est(Ninl+1:Ninl+Ntap) = ...
       pstat(rho,Vout,Lam,Gam,xctop(Ninl+1:Ninl+Ntap),zctop(Ninl+1:Ninl+Ntap));
     
-    psptop(Ninl+1:Ninl+Ntap) = ...
-        LSwall;
+%     psptop(Ninl+1:Ninl+Ntap) = ...
+%         LSwall;
     
-    pspbot(Ninl+1:Ninl+Ntap) = pspbot(Ninl+1:Ninl+Ntap) * 1.75;
-    psptop(Ninl+1:Ninl+Ntap) = psptop(Ninl+1:Ninl+Ntap) * 1.75;
+%     pspbot(Ninl+1:Ninl+Ntap) = pspbot(Ninl+1:Ninl+Ntap) * 1.75;
+%     psptop(Ninl+1:Ninl+Ntap) = psptop(Ninl+1:Ninl+Ntap) * 1.75;
 
     %- - - - - - - - - -
 
@@ -183,22 +184,22 @@ function corrected2D = twall(uncorrected2D,walldata)
     psptop(Ninl+Ntap+1:Ninl+Ntap+Nout) = 0.0;
 
     % constant gamma at far end
-    %ibcbot(Ninl+Ntap+Nout) = -1;
-    %ibctop(Ninl+Ntap+Nout) = -1;
+    ibcbot(Ninl+Ntap+Nout) = -1;
+    ibctop(Ninl+Ntap+Nout) = -1;
 
     %--------------------------------------------------------
     % override, for testing
 
-    %ibcbot(2:Ninl) = 2;
-    %ibctop(2:Ninl) = 2;
+%     ibcbot(2:Ninl) = 2;
+%     ibctop(2:Ninl) = 2;
 
-    % flat walls over tap section
+%     flat walls over tap section
     ibcbot(Ninl+1:Ninl+Ntap) = -2;
     ibctop(Ninl+1:Ninl+Ntap) = -2;
 
-    % flat walls over exit
-    %ibcbot(Ninl+Ntap+1:Ninl+Ntap+Nout) = -2;
-    %ibctop(Ninl+Ntap+1:Ninl+Ntap+Nout) = -2;
+%     flat walls over exit
+%     ibcbot(Ninl+Ntap+1:Ninl+Ntap+Nout) = -2;
+%     ibctop(Ninl+Ntap+1:Ninl+Ntap+Nout) = -2;
 
     %-----------------------------------------------------------------
     % put top and bottom data into convenient single common arrays
@@ -323,7 +324,9 @@ function corrected2D = twall(uncorrected2D,walldata)
     sa = sin(Dal);
     cx = (cxu*ca + clu*sa)*Vout^2/Veff^2;
     cl = (clu*ca - cxu*sa)*Vout^2/Veff^2;
-
+    
+    cliter = [cliter, cl];
+    cxiter = [cxiter, cx];
     % corrected Reynolds number
     Re = Reu*Veff/Vout;
 
@@ -424,7 +427,7 @@ function corrected2D = twall(uncorrected2D,walldata)
     psitop(1:Npan) = psic(Npan+1:Npan+Npan)/(Vout*cref);
     gamtop(1:Npan) = gamma(Npan+1:Npan+Npan)/Vout;
 
-
+% 
 %     plot(xcbot/0.0254,ubot,'b*-',xctop/0.0254,utop,'r*-');
 %     xlabel('x');
 %     ylabel('u/V   (bot: blue   top: red)');
@@ -436,7 +439,7 @@ function corrected2D = twall(uncorrected2D,walldata)
 %     ylabel('w/V   (bot: blue   top: red)');
 % 
 %     figure;
-% 
+
 %     plot(xcbot/0.0254,cpbot,'b*-',xctop/0.0254,cptop,'r*-');
 %     xlabel('x');
 %     ylabel('Cp   (bot: blue   top: red)');
@@ -446,7 +449,7 @@ function corrected2D = twall(uncorrected2D,walldata)
 %     plot(xcbot/0.0254,psibot,'b*-',xctop/0.0254,psitop,'r*-');
 %     xlabel('x');
 %     ylabel('psi/Vc    (bot: blue   top: red)');
-% 
+
 %     figure;
 % 
 %     plot(xcbot/0.0254,gambot,'b*-',xctop/0.0254,gamtop,'r*-');
@@ -454,7 +457,7 @@ function corrected2D = twall(uncorrected2D,walldata)
 %     ylabel('gamma/V    (bot: blue   top: red)');
 % 
 % 
-%     drawnow
+%      drawnow
     corrected2D = table;   
     corrected2D.cl_average = cl;
     corrected2D.cx_average = cx;

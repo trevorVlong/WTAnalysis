@@ -13,7 +13,7 @@ tarenum = [2,3];
 runnum = 1:1:11;
 
 homedir = "/Users/trevorlong/Dropbox (MIT)/Tunnel_Data/spring21/PerformanceRuns/";
-rundir  = strcat(homedir,"runs");
+rundir  = strcat(homedir,"runs/runs");
 caldir  = strcat(homedir,"calibrations");
 taredir = strcat(homedir,"tares");
 
@@ -76,7 +76,7 @@ for ri = 1:row
         cx(ri,ci) = runtable{ri,ci}.cx_average;
         cm(ri,ci) = runtable{ri,ci}.cm_average;
         rho(ri,ci) = runtable{ri,ci}.rho;
-        Vinf(ri,ci) = runtable{ri,ci}.Vinf_measured;
+        Vinf(ri,ci) = runtable{ri,ci}.Vinf;
         
         Re(ri,ci) = (rho(ri,ci) * Vinf(ri,ci)*l)/mu;
     end

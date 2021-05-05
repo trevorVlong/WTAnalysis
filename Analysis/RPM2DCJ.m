@@ -1,8 +1,8 @@
-function [dCJ,VJ_V,CQ,wing_geom] = RPM2DCJ(RPM,qinf,rho)            
+function [dCJ,VJ_V,CQ,CT,T,wing_geom] = RPM2DCJ(RPM,qinf,rho)            
 % returns DCJ from RPM data and Vinf data and correlating them with thrust from a qprop model of the Tmotor P40 (or whatever)
     
     addpath('/Users/trevorlong/Dropbox (MIT)/Tunnel_Data/sum_fall_20/results/Analysis')
-    load('options.mat','wing_geom');
+    load('analysis_options.mat','wing_geom');
     %pull geom from table
     c = wing_geom.c_wing;
     b = wing_geom.b_wing;
@@ -45,8 +45,8 @@ function [dCJ,VJ_V,CQ,wing_geom] = RPM2DCJ(RPM,qinf,rho)
     %CT       = CTlambda(RPM,Vinf*ones(length(RPM),1)); %thrust coeff from qprop surface
     Cpd      = 0; %?
     hd       = c*pi*((R/c)^2-(rh/c)^2)*4/(b/c)*sqrt(1-Cpd);%disc height
-    Tr       = CT*.5*rho.*(omega'*R).^2*pi*R^2;
-    VJ_V     = sqrt(2*Tr./(rho*Ad*Vinf^2)+1); %Vj/Vinf
+    T       = CT*.5*rho.*(omega'*R).^2*pi*(R^2-rh^2);
+    VJ_V     = sqrt(2*T./(rho*Ad*Vinf^2)+1); %Vj/Vinf
     CQ       = .5*(1+VJ_V)*hd/c;
     
     for t = 1:length(omega)

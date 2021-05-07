@@ -7,11 +7,11 @@ calnum  = [2];
 % tarenum = [124:132];
 % tarenum = [133:140]
 %tarenum = [141:149]; % lowered mounts
-tarenum = 115:123; %nominal mounts
+%tarenum = 115:123; %nominal mounts
 %tarenum = 133:140; % slotted flaps
 % tarenum = 124:132; %small prop
 %tarenum = [113,112,108,104,105,106,109,110,111]; % high mount
-% tarenum = 141:149; % low mount
+ tarenum = 141:149; % low mount
 % tarenum = 150:158; % 20 deg mount
 %tarenum = 159:167; % 0  deg mount
 % tarenum = [113,112,108,105,106,107,109,110,111]; high mount
@@ -20,7 +20,7 @@ dfvals = [0,20,30,35,40,45,50,55,60];
 runnum = 1:11;
 % runnum = 6;
 
-config = 'BaseConfig';
+config = 'SmallProp';
 plotting = 1;
 saverun = 1;
 

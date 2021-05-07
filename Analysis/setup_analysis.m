@@ -14,7 +14,7 @@ function [] = setup_analysis()
     
     %---------------------
     % EDIT PROP DIAM HERE
-    propdiam = 5; % inches
+    propdiam = 4; % inches
     %---------------------
     
     wing_geom = table();
